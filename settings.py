@@ -14,6 +14,7 @@ TWITTER_TARGET = ["solanium_io", "AvalaunchApp"]
 
 # ################################## ACTIVE SETTINGS##################################
 QUOTE_TWEET_ID = "1537359722311200768"
+SEARCH_TWEET_ID = "1538809069833662464"
 
 REQUIRED_TAGS = ["BREonMEXC"]
 REQUIRED_TAGS_LOWER = set([tag.lower() for tag in REQUIRED_TAGS])

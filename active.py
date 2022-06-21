@@ -1,6 +1,7 @@
 import requests
 import json
 from dotenv import dotenv_values
+from twitter import *
 
 config = dotenv_values(".env")
 BEARER_TOKEN = config["BEARER_TOKEN"]
@@ -36,5 +37,13 @@ def main():
     print(json.dumps(json_response, indent=4, sort_keys=True))
 
 
+def twitterTest():
+    twitter = Twitter(auth=OAuth2(bearer_token=BEARER_TOKEN))
+
+    # Now work with Twitter
+    twitter.search.tweets(q='keyword')
+
+
 if __name__ == "__main__":
-    main()
+    # main()
+    twitterTest()

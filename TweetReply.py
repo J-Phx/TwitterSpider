@@ -1,20 +1,27 @@
-import tweepy
+import time
+import requests
+import json
+import pandas as pd
 from settings import *
 
-# bear_token = 'XXXXXX'
-client = tweepy.Client(bearer_token=BEARER_TOKEN)
-# auth = tweepy.OAuth2AppHandler("27kBdl4CccojC43MTMSfXEafm", "czX4kDIv4WxJLiRABnNugshX1S6SjeThmTEhfqCqBovafHnMjg")
-# api = tweepy.API(auth)
-tweets_fields_list = ['created_at', 'id', 'text']
-expansions_list = ['author_id']
-client.search_all_tweets(query="conversation_id:1536679023254056960 -from:1474222235279925248",
-                         tweet_fields=tweets_fields_list, expansions=expansions_list, max_results=500)
 
-for response in tweepy.Paginator(
-        client.search_all_tweets, query="conversation_id:1536679023254056960 -from:1474222235279925248",
-        tweet_fields=tweets_fields_list, expansions=expansions_list, max_results=500):
+search_url = f"https://api.twitter.com/2/tweets/search/all"
 
-    print("一共有：" + str(len(response.data)) + " 条回复")
-    for tweet in response.data:
-        print("-------------分割线----------------")
-        print(tweet.author_id, tweet.id, tweet.created_at, tweet.text)
+# Optional params: start_time,end_time,since_id,until_id,max_results,next_token,
+# expansions,tweet.fields,media.fields,poll.fields,place.fields,user.fields
+search_params = {
+    "query": f"conversation_id:{SEARCH_TWEET_ID} to:boba_brewery -from:boba_brewery",
+    "max_results": 500,
+    "expansions": "author_id,entities.mentions.username",
+    "user.fields": "username",
+    "tweet.fields": "entities,created_at,public_metrics",
+    # "end_time":
+}
+
+response = requests.get(search_url, params=search_params, headers=REQUEST_HEADERS)
+print(response.text)
+
+# {"client_id":"23074266","detail":"When authenticating requests to the Twitter API v2 endpoints, you must use keys and tokens from a Twitter developer App that is attached to a Project. You can create a project via the developer portal.","registration_url":"https://developer.twitter.com/en/docs/projects/overview","title":"Client Forbidden","required_enrollment":"Standard Basic","reason":"client-not-enrolled","type":"https://api.twitter.com/2/problems/client-forbidden"}
+
+# 当前权限不够, 不支持全局搜索
+# https://developer.twitter.com/en/docs/twitter-api/getting-started/about-twitter-api#v2-access-leve
