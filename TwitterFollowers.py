@@ -16,7 +16,7 @@ def pullRequest(_url):
 
 
 def processResponse(response):
-    url = response.request.url
+    url = response.request.url.split("?")[0]
     if response.status_code != 200:
         print(f"ERROR: {response.text}")
         time.sleep(300)
